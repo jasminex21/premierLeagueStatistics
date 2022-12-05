@@ -39,7 +39,7 @@ parameter_tabs = tabsetPanel(
            numericInput("threshold", 
                         label = "Only show values above this proportion (numeric value between 0.0 and 1.0)",
                         min = 0.0,
-                        value = 0.01))
+                        value = 0.0))
 )
 
 ui = fluidPage(
