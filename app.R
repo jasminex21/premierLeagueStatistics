@@ -2,6 +2,7 @@ library(shiny)
 library(tidyverse)
 library(ggplot2)
 library(viridis)
+library(shinythemes)
 
 footy = read.csv("project_3_footy_dataset.csv") %>%
   select(Age, Goals, Nation, TotalMinutes, AnnualWages, Continent)
@@ -38,6 +39,7 @@ parameter_tabs = tabsetPanel(
 )
 
 ui = fluidPage(
+  theme = shinytheme("spacelab"),
   titlePanel(title = strong("Premier League Player Statistics"),
              windowTitle = "Player Statistics"), 
   
