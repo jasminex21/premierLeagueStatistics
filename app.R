@@ -35,7 +35,11 @@ parameter_tabs = tabsetPanel(
            selectInput("cvar", 
                        label = "Select categorical variable:", 
                        choices = c("Continent", "Nation"), 
-                       selected = "Continent"))
+                       selected = "Continent"), 
+           numericInput("threshold", 
+                        label = "Only show values above this proportion (numeric value between 0.0 and 1.0)",
+                        min = 0.0,
+                        value = 0.01))
 )
 
 ui = fluidPage(
@@ -120,7 +124,7 @@ server = function(input, output) {
                           color = "blue", 
                           linetype = "dashed")}},
            
-           categorical = ggplot(footy) + 
+           categorical = ggplot(footy %>% filter(eval(parse(text = input$cvar)) %in% names(prop.table(table(eval(parse(text = input$cvar))))[prop.table(table(eval(parse(text = input$cvar)))) > input$threshold]))) + 
              geom_bar(aes(x = eval(parse(text = input$cvar)), 
                           fill = eval(parse(text = input$cvar))), 
                       color = "black") + 
@@ -145,7 +149,9 @@ server = function(input, output) {
       }
       else if (input$params == "categorical") {
         as.data.frame(prop.table(table(select(footy, input$cvar)))) %>%
-          rename(Proportion = 2) 
+          rename(Proportion = 2) %>%
+          mutate(Percentage = Proportion * 100) %>%
+          format(digits = 4)
       }
     })
 }
